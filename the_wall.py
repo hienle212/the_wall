@@ -14,8 +14,8 @@ def index():
 @app.route('/wall', methods = ['GET'])
 def wall():
 	all_messages = mysql.query_db("SELECT messages.user_id, messages.message, messages.id AS message_id, messages.created_at, concat(users.first_name, ' ', users.last_name) as name FROM messages LEFT JOIN users ON users.id = messages.user_id ORDER BY messages.created_at DESC;")
-	all_comments = mysql.query_db("SELECT comments.id AS comment_id, comments.comment, comments.created_at, message_id, user_id, concat(users.first_name, ' ', users.last_name) AS name FROM comments LEFT JOIN users ON users.id = comments.user_id;")
-	print all_comments
+	all_comments = mysql.query_db("SELECT comments.id AS comment_id, comments.comment, comments.created_at, message_id, user_id, concat(users.first_name, ' ', users.last_name) AS name FROM comments LEFT JOIN users ON users.id = comments.user_id ORDER BY comments.created_at ASC;")
+	# print all_comments
 	return render_template('wall_page.html', all_messages = all_messages, all_comments = all_comments)	
 @app.route('/register', methods =['POST'])
 def register():
@@ -66,6 +66,14 @@ def post_message():
 		mysql.query_db(query2, data2)
 		return redirect ('/wall')
 	return redirect ('/wall')
+@app.route('/delete/<id>', methods=['GET'])
+def delete(id):
+    query = "DELETE FROM messages WHERE id = :id"
+    data = {
+           'id': id
+           }
+    mysql.query_db(query, data)
+    return redirect ('/wall')
 @app.route('/comment', methods=['POST'])
 def comment():
 	if request.form['comment'] != '':

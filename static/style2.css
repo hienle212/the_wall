@@ -30,3 +30,8 @@ textarea{
 	width:800px;
 	margin:0px;
 }
+#comment1{
+	border: 2px solid black;
+	background-color: green;
+	color:white;
+}

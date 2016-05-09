@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>Codingdojo Wall Page</title>
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='wall_style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css') }}">
 
 </head>
 <body>
@@ -21,7 +21,11 @@
 	<div id="message">
 {% for message in all_messages: %}
  	<h3>{{ message['name']}} - {{ message['created_at']}}</h3>
-    <span>{{ message['message']}}</span> 
+ 		{% if message['user_id'] == session['user_id'] %}
+    	<span>{{ message['message']}} - <a href="/delete/{{ message['message_id']}}">Remove</a></span> 
+    	{% else %}
+    	<span>{{message['message']}}</span>
+    	{% endif %}
     <div id="comment">
     	<p>Leave a comment </p>
 		<form action='/comment' method='POST'>
@@ -32,9 +36,10 @@
 				{% endif %}
 			{% endfor %}
 			<textarea name="comment"></textarea>
-			<input type='submit' value='Comment'>
+			<input id = "comment1" type='submit' value='Comment'>
 		</form>
 	</div>
+
 {% endfor %}
 </div>
 
